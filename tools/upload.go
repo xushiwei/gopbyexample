@@ -1,3 +1,6 @@
+//go:build ignore
+// +build ignore
+
 // Uploads the generated site from the public/ directory to the S3 bucket from
 // which it's served.
 // To invoke this program, the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
