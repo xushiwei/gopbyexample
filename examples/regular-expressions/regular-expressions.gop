@@ -1,0 +1,79 @@
+// Go offers built-in support for [regular expressions](http://en.wikipedia.org/wiki/Regular_expression).
+// Here are some examples of  common regexp-related tasks
+// in Go.
+
+import (
+	"bytes"
+
+	"regexp"
+)
+
+// This tests whether a pattern matches a string.
+match, _ := regexp.matchString("p([a-z]+)ch", "peach")
+println match
+
+// Above we used a string pattern directly, but for
+// other regexp tasks you'll need to `Compile` an
+// optimized `Regexp` struct.
+r, _ := regexp.compile("p([a-z]+)ch")
+
+// Many methods are available on these structs. Here's
+// a match test like we saw earlier.
+println r.matchString("peach")
+
+// This finds the match for the regexp.
+println r.findString("peach punch")
+
+// This also finds the first match but returns the
+// start and end indexes for the match instead of the
+// matching text.
+println "idx:", r.findStringIndex("peach punch")
+
+// The `Submatch` variants include information about
+// both the whole-pattern matches and the submatches
+// within those matches. For example this will return
+// information for both `p([a-z]+)ch` and `([a-z]+)`.
+println r.findStringSubmatch("peach punch")
+
+// Similarly this will return information about the
+// indexes of matches and submatches.
+println r.findStringSubmatchIndex("peach punch")
+
+// The `All` variants of these functions apply to all
+// matches in the input, not just the first. For
+// example to find all matches for a regexp.
+println r.findAllString("peach punch pinch", -1)
+
+// These `All` variants are available for the other
+// functions we saw above as well.
+println "all:", r.findAllStringSubmatchIndex(
+	"peach punch pinch", -1)
+
+// Providing a non-negative integer as the second
+// argument to these functions will limit the number
+// of matches.
+println r.findAllString("peach punch pinch", 2)
+
+// Our examples above had string arguments and used
+// names like `MatchString`. We can also provide
+// `[]byte` arguments and drop `String` from the
+// function name.
+println r.match([]byte("peach"))
+
+// When creating global variables with regular
+// expressions you can use the `MustCompile` variation
+// of `Compile`. `MustCompile` panics instead of
+// returning an error, which makes it safer to use for
+// global variables.
+r = regexp.mustCompile("p([a-z]+)ch")
+println "regexp:", r
+
+// The `regexp` package can also be used to replace
+// subsets of strings with other values.
+println r.replaceAllString("a peach", "<fruit>")
+
+// The `Func` variant allows you to transform matched
+// text with a given function.
+in := []byte("a peach")
+out := r.replaceAllFunc(in, bytes.ToUpper)
+println string(out)

@@ -1,0 +1,58 @@
+// Go offers extensive support for times and durations;
+// here are some examples.
+
+import (
+	"time"
+)
+
+p := println
+
+// We'll start by getting the current time.
+now := time.now()
+p now
+
+// You can build a `time` struct by providing the
+// year, month, day, etc. Times are always associated
+// with a `Location`, i.e. time zone.
+then := time.date(
+	2009, 11, 17, 20, 34, 58, 651387237, time.UTC)
+p then
+
+// You can extract the various components of the time
+// value as expected.
+p then.year()
+p then.month()
+p then.day()
+p then.hour()
+p then.minute()
+p then.second()
+p then.nanosecond()
+p then.location()
+
+// The Monday-Sunday `Weekday` is also available.
+p then.weekday()
+
+// These methods compare two times, testing if the
+// first occurs before, after, or at the same time
+// as the second, respectively.
+p then.before(now)
+p then.after(now)
+p then.equal(now)
+
+// The `Sub` methods returns a `Duration` representing
+// the interval between two times.
+diff := now.sub(then)
+p diff
+
+// We can compute the length of the duration in
+// various units.
+p diff.hours()
+p diff.minutes()
+p diff.seconds()
+p diff.nanoseconds()
+
+// You can use `Add` to advance a time by a given
+// duration, or with a `-` to move backwards by a
+// duration.
+p then.add(diff)
+p then.add(-diff)

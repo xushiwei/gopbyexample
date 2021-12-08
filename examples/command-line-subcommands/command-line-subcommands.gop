@@ -1,0 +1,52 @@
+// Some command-line tools, like the `go` tool or `git`
+// have many *subcommands*, each with its own set of
+// flags. For example, `go build` and `go get` are two
+// different subcommands of the `go` tool.
+// The `flag` package lets us easily define simple
+// subcommands that have their own flags.
+
+import (
+	"flag"
+
+	"os"
+)
+
+// We declare a subcommand using the `NewFlagSet`
+// function, and proceed to define new flags specific
+// for this subcommand.
+fooCmd := flag.newFlagSet("foo", flag.ExitOnError)
+fooEnable := fooCmd.bool("enable", false, "enable")
+fooName := fooCmd.string("name", "", "name")
+
+// For a different subcommand we can define different
+// supported flags.
+barCmd := flag.newFlagSet("bar", flag.ExitOnError)
+barLevel := barCmd.int("level", 0, "level")
+
+// The subcommand is expected as the first argument
+// to the program.
+if len(os.Args) < 2 {
+	println "expected 'foo' or 'bar' subcommands"
+	os.exit 1
+}
+
+// Check which subcommand is invoked.
+switch os.Args[1] {
+
+// For every subcommand, we parse its own flags and
+// have access to trailing positional arguments.
+case "foo":
+	fooCmd.parse os.Args[2:]
+	println "subcommand 'foo'"
+	println "  enable:", *fooEnable
+	println "  name:", *fooName
+	println "  tail:", fooCmd.args()
+case "bar":
+	barCmd.parse os.Args[2:]
+	println "subcommand 'bar'"
+	println "  level:", *barLevel
+	println "  tail:", barCmd.args()
+default:
+	println "expected 'foo' or 'bar' subcommands"
+	os.exit 1
+}

@@ -1,0 +1,50 @@
+// Go's `math/rand` package provides
+// [pseudorandom number](http://en.wikipedia.org/wiki/Pseudorandom_number_generator)
+// generation.
+
+import (
+	"math/rand"
+	"time"
+)
+
+// For example, `rand.Intn` returns a random `int` n,
+// `0 <= n < 100`.
+print rand.intn(100), ","
+print rand.intn(100)
+println
+
+// `rand.Float64` returns a `float64` `f`,
+// `0.0 <= f < 1.0`.
+println rand.float64()
+
+// This can be used to generate random floats in
+// other ranges, for example `5.0 <= f' < 10.0`.
+print (rand.float64()*5)+5, ","
+print (rand.float64()*5)+5
+println
+
+// The default number generator is deterministic, so it'll
+// produce the same sequence of numbers each time by default.
+// To produce varying sequences, give it a seed that changes.
+// Note that this is not safe to use for random numbers you
+// intend to be secret, use `crypto/rand` for those.
+s1 := rand.newSource(time.now().unixNano())
+r1 := rand.new(s1)
+
+// Call the resulting `rand.Rand` just like the
+// functions on the `rand` package.
+print r1.intn(100), ","
+print r1.intn(100)
+println
+
+// If you seed a source with the same number, it
+// produces the same sequence of random numbers.
+s2 := rand.newSource(42)
+r2 := rand.new(s2)
+print r2.intn(100), ","
+print r2.intn(100)
+println
+s3 := rand.newSource(42)
+r3 := rand.new(s3)
+print r3.intn(100), ","
+print r3.intn(100)
